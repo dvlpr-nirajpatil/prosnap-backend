@@ -6,7 +6,7 @@ const Highlight = require("./src/models/highlight.model");
 
 // ✅ Replace with your MongoDB URI
 const MONGO_URI =
-  "mongodb+srv://Cluster30553:admin2001@reshimgathi.qvetvuo.mongodb.net/reshimgathi?retryWrites=true&w=majority&appName=reshimgathi"; // change as per your env
+  ""; // change as per your env
 
 (async () => {
   try {
