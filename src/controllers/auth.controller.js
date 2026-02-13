@@ -334,7 +334,7 @@ module.exports.getCurrentUser = async (req, res) => {
     }
 
     const user = await User.findById(id).select(
-      "userName name email bio profilePicture gender dob followersCount followingCount postsCount isVerified accountType createdAt",
+      "userName name email bio profilePicture gender dob followersCount followingCount postsCount isVerified accountType createdAt registration",
     );
 
     if (!user) {

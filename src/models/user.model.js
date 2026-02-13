@@ -4,14 +4,10 @@ const userSchema = new mongoose.Schema(
   {
     userName: {
       type: String,
-      unique: true,
-      lowercase: true,
       trim: true,
-      minlength: 3,
-      maxlength: 30,
-      index: true,
+      lowercase: true,
+      default: null,
     },
-
     name: {
       type: String,
       trim: true,
@@ -100,5 +96,12 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.index({ userName: "text", name: "text" });
+userSchema.index(
+  { userName: 1 },
+  {
+    unique: true,
+    partialFilterExpression: { userName: { $type: "string" } },
+  },
+);
 
 module.exports = mongoose.model("User", userSchema);
