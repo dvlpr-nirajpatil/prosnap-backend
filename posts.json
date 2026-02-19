@@ -1,0 +1,745 @@
+{
+  "info": {
+    "_postman_id": "b9a5d694-5922-461a-a833-b72a021bcb5a",
+    "name": "Prosnap",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "34925659",
+    "_collection_link": "https://go.postman.co/collection/34925659-b9a5d694-5922-461a-a833-b72a021bcb5a?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "sign-in",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Parse response JSON",
+                  "const responseJson = pm.response.json();",
+                  "",
+                  "// Check status success",
+                  "if (responseJson.status === 200) {",
+                  "    ",
+                  "    const accessToken = responseJson.data.accessToken;",
+                  "    const refreshToken = responseJson.data.refreshToken;",
+                  "",
+                  "    // Set collection variables",
+                  "    pm.collectionVariables.set(\"accessToken\", accessToken);",
+                  "    pm.collectionVariables.set(\"refreshToken\", refreshToken);",
+                  "",
+                  "    console.log(\"✅ Tokens saved to collection variables\");",
+                  "} else {",
+                  "    console.log(\"❌ Login failed, tokens not saved\");",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"dev.nirajpatil@gmail.com\",\n    \"password\": \"12345678\",\n    \"deviceId\": \"s-1\",\n    \"deviceType\": \"mobile\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/sign-in",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "sign-in"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "sign-up",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Parse response JSON",
+                  "const responseJson = pm.response.json();",
+                  "",
+                  "// Check status success",
+                  "if (responseJson.status === 200) {",
+                  "    ",
+                  "    const accessToken = responseJson.data.accessToken;",
+                  "    const refreshToken = responseJson.data.refreshToken;",
+                  "",
+                  "    // Set collection variables",
+                  "    pm.collectionVariables.set(\"accessToken\", accessToken);",
+                  "    pm.collectionVariables.set(\"refreshToken\", refreshToken);",
+                  "",
+                  "    console.log(\"✅ Tokens saved to collection variables\");",
+                  "} else {",
+                  "    console.log(\"❌ Login failed, tokens not saved\");",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"dev.ganeshdhage@gmail.com\",\n    \"password\": \"12345678\",\n    \"deviceId\": \"s-1\",\n    \"deviceType\": \"mobile\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/sign-up",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "sign-up"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "sign out current device",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/sign-out",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "sign-out"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "sign out all devices",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/sign-out-all",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "sign-out-all"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "refresh-token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/refresh-token",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "refresh-token"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get current user details",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/auth/me",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "registration",
+      "item": [
+        {
+          "name": "save details",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Niraj Patil\",\n  \"userName\": \"niraj.patil_01\",\n  \"bio\": \"Building Prosnap 🚀 | Backend Developer | Node.js\",\n  \"gender\": \"male\",\n  \"dob\": \"25/12/2000\",\n  \"profilePicture\":\"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/registration/profile",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "registration",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Post",
+      "item": [
+        {
+          "name": "create new post",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"caption\": \"Building Prosnap 🚀 #prosnap #developer #nodejs\",\n  \"media\": [\n    {\n      \"url\": \"https://example.com/image1.jpg\",\n      \"type\": \"image\"\n    }\n  ],\n  \"location\": \"Mumbai, India\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/post/",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "post",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "like post",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{url}}/post/:postId/like",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "post",
+                ":postId",
+                "like"
+              ],
+              "variable": [
+                {
+                  "key": "postId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete post",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{url}}/post/:postId",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "post",
+                ":postId"
+              ],
+              "variable": [
+                {
+                  "key": "postId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "comment post",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"I agree!\",\n  \"parentCommentId\": \"65f7e8d3a29f4b1234567890\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/post/:postId/comment",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "post",
+                ":postId",
+                "comment"
+              ],
+              "variable": [
+                {
+                  "key": "postId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get post comments",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{url}}/post/:postId/comments",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "post",
+                ":postId",
+                "comments"
+              ],
+              "variable": [
+                {
+                  "key": "postId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete comment",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{url}}/post/comment/:commentId",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "post",
+                "comment",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "commentId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get likes",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{url}}/post/:postId/likes",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "post",
+                ":postId",
+                "likes"
+              ],
+              "variable": [
+                {
+                  "key": "postId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "feed",
+      "item": [
+        {
+          "name": "get feeds",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"refreshToken\": \"{{refreshToken}}\"\n}"
+            },
+            "url": {
+              "raw": "{{url}}/feed/?page=3",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "feed",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "3"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "story",
+      "item": [
+        {
+          "name": "create new story",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"media\": {\n    \"url\": \"https://example.com/story.jpg\",\n    \"type\": \"image\"\n  },\n  \"caption\": \"Working on Prosnap 🚀\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/story/",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "story",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "view story",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/story/:storyId/view",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "story",
+                ":storyId",
+                "view"
+              ],
+              "variable": [
+                {
+                  "key": "storyId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get stories",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/story?page=2",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "story"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get story views",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/story/:storyId/views",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "story",
+                ":storyId",
+                "views"
+              ],
+              "variable": [
+                {
+                  "key": "storyId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete story",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/story/:storyId",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "story",
+                ":storyId"
+              ],
+              "variable": [
+                {
+                  "key": "storyId",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "url",
+      "value": ""
+    },
+    {
+      "key": "accessToken",
+      "value": ""
+    },
+    {
+      "key": "refreshToken",
+      "value": ""
+    }
+  ]
+}
