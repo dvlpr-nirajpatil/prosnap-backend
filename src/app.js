@@ -60,18 +60,18 @@ app.use(sanitizeRequest);
 /* =========================
    VALIDATIONS
    ========================= */
-app.use((req, res, next) => {
-  if (
-    req.method === "POST" &&
-    (!req.body || Object.keys(req.body).length === 0)
-  ) {
-    return res.status(400).json({
-      success: false,
-      message: "JSON payload is missing",
-    });
-  }
-  next();
-});
+// app.use((req, res, next) => {
+//   if (
+//     req.method === "POST" &&
+//     (!req.body || Object.keys(req.body).length === 0)
+//   ) {
+//     return res.status(400).json({
+//       success: false,
+//       message: "JSON payload is missing",
+//     });
+//   }
+//   next();
+// });
 
 /* =========================
    HEALTH CHECK

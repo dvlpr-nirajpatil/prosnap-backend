@@ -69,7 +69,7 @@ const seedDatabase = async () => {
           type: "image",
         },
         caption: faker.lorem.words(5),
-        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
       });
     }
 
