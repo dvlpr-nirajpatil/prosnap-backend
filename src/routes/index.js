@@ -5,5 +5,6 @@ router.use("/registration", require("./register.route"));
 router.use("/post", require("./post.route"));
 router.use("/feed", require("./feed.route"));
 router.use("/story", require("./story.route"));
+router.use("/upload", require("./upload.route"));
 
 module.exports = router;
