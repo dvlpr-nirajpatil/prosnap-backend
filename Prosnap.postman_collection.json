@@ -782,6 +782,308 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Conversation",
+      "item": [
+        {
+          "name": "create new conversation",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"receiverId\": \"6996eeaf9eb67356d22de74a\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/conversation",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "conversation"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get conversations",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/conversation",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "conversation"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Search",
+      "item": [
+        {
+          "name": "search-users",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"key\":\"https://prosnap-bucket.s3.ap-south-1.amazonaws.com/images/699401f9486438eb880dc019/25e24a97-02bc-4887-9a3f-33cfacb291af.webp\"\n}"
+            },
+            "url": {
+              "raw": "{{url}}/search/users",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "search",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "New Request",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/search/feed",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "search",
+                "feed"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "message",
+      "item": [
+        {
+          "name": "send message",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"conversationId\": \"69a00225b7e95212cda03295\",\n    \"text\": \"Hiiii\",\n    \"image\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/message",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "message"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get messages of chat",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"conversationId\": \"69a00225b7e95212cda03295\",\n    \"text\": \"Hiiii\",\n    \"image\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/message/:conversationId",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "message",
+                ":conversationId"
+              ],
+              "variable": [
+                {
+                  "key": "conversationId",
+                  "value": "69a00225b7e95212cda03295"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get chat details",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"conversationId\": \"69a00225b7e95212cda03295\",\n    \"text\": \"Hiiii\",\n    \"image\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/message/:conversationId/details",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "message",
+                ":conversationId",
+                "details"
+              ],
+              "variable": [
+                {
+                  "key": "conversationId",
+                  "value": "69a00225b7e95212cda03295"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get chat details Copy",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"conversationId\": \"69a00225b7e95212cda03295\",\n    \"text\": \"Hiiii\",\n    \"image\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/message/:conversationId/view",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "message",
+                ":conversationId",
+                "view"
+              ],
+              "variable": [
+                {
+                  "key": "conversationId",
+                  "value": "69a00225b7e95212cda03295"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get chat details Copy",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"conversationId\":\"\", \"isTyping\":\"\" }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{url}}/message/typing",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "message",
+                "typing"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Profile",
+      "item": [
+        {
+          "name": "Get profile details",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"refreshToken\": \"{{refreshToken}}\"\n}"
+            },
+            "url": {
+              "raw": "{{url}}/profile",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "auth": {
