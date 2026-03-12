@@ -78,6 +78,46 @@ Returns opposite user details for chat screen.
 Rules:
 - At least one of `text` or `image` is required.
 
+- Response data:
+```json
+{
+  "message": {
+    "_id": "<messageId>",
+    "conversation": "<conversationId>",
+    "sender": {
+      "_id": "<userId>",
+      "userName": "john_doe",
+      "name": "John Doe",
+      "profilePicture": "https://...",
+      "isVerified": false
+    },
+    "text": "Hi",
+    "image": null,
+    "status": "unseen",
+    "createdAt": "2026-02-26T00:00:00.000Z"
+  },
+  "conversation": {
+    "_id": "<conversationId>",
+    "opponent": {
+      "_id": "<userId>",
+      "userName": "jane_doe",
+      "name": "Jane Doe",
+      "profilePicture": "https://...",
+      "isVerified": false
+    },
+    "lastMessage": {
+      "text": "Hi",
+      "image": null,
+      "sender": "<senderUserId>",
+      "createdAt": "2026-02-26T00:00:00.000Z"
+    },
+    "createdAt": "2026-02-26T00:00:00.000Z",
+    "updatedAt": "2026-02-26T00:00:00.000Z",
+    "unseenMessageCount": 0
+  }
+}
+```
+
 ## 5) Get Messages By Conversation
 - Method: `GET`
 - URL: `/message/:conversationId?page=1&limit=30`
@@ -122,8 +162,36 @@ const socket = io(SOCKET_URL, {
 
 ## Events Frontend Should Listen
 
+### `conversation-updated`
+Triggered for both users whenever a new message changes the latest conversation state.
+Use this event to insert/update/reorder the item in the existing conversations list.
+
+Payload:
+```json
+{
+  "_id": "<conversationId>",
+  "opponent": {
+    "_id": "<userId>",
+    "userName": "john_doe",
+    "name": "John Doe",
+    "profilePicture": "https://...",
+    "isVerified": false
+  },
+  "lastMessage": {
+    "text": "Hi",
+    "image": null,
+    "sender": "<senderUserId>",
+    "createdAt": "2026-02-26T00:00:00.000Z"
+  },
+  "createdAt": "2026-02-26T00:00:00.000Z",
+  "updatedAt": "2026-02-26T00:00:00.000Z",
+  "unseenMessageCount": 1
+}
+```
+
 ### `new-message`
 Triggered when opposite user sends a message.
+Listen to this event only while the user is on the active chat screen for that conversation.
 Payload:
 ```json
 {
@@ -174,5 +242,6 @@ Payload:
 1. Open conversation screen -> call `GET /message/:conversationId/details` and `GET /message/:conversationId`.
 2. Immediately call `POST /message/:conversationId/view`.
 3. While typing -> call `POST /message/typing` with `isTyping: true`; on stop/blur/send call with `isTyping: false`.
-4. On send -> call `POST /message`.
-5. Listen to `new-message`, `typing-indicator`, `messages-seen` and update UI state.
+4. On send -> call `POST /message` and use the returned `conversation` object to update the sender conversation list immediately.
+5. Listen to `conversation-updated` globally and use it to insert/update/reorder conversations for both users.
+6. Listen to `new-message`, `typing-indicator`, `messages-seen` only while the chat screen is open, and update the active conversation UI.

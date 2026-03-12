@@ -1,101 +1,97 @@
-// src/services/conversation.service.js
-
-const Message = require("../models/message.model"); // ensure this path is correct
+const Message = require("../models/message.model");
 const logger = require("../core/logger");
-const socketService = require("../services/socket.service");
+const socketService = require("./socket.service");
 
-// -----------------------------------------------------------------------------
-// GET UNSEEN MESSAGES COUNT FUNCTION
-// -----------------------------------------------------------------------------
+function formatOpponent(opponent) {
+  if (!opponent) return null;
+
+  return {
+    _id: opponent._id,
+    userName: opponent.userName,
+    name: opponent.name,
+    profilePicture: opponent.profilePicture,
+    isVerified: opponent.isVerified,
+  };
+}
+
 async function getUnseenMessagesCount(conversationId, userId) {
   try {
-    // Count messages that are unseen and not sent by the current user
-    const count = await Message.countDocuments({
+    return await Message.countDocuments({
       conversation: conversationId,
       sender: { $ne: userId },
       status: "unseen",
+      deleted: false,
     });
-
-    return count;
   } catch (e) {
     logger.error("GET UNSEEN MESSAGES COUNT ERROR:", e);
-    throw new Error(e);
-  }
-}
-
-// -----------------------------------------------------------------------------
-// SEND CONVERSATION TO USER
-// -----------------------------------------------------------------------------
-async function sendConversations({ conversation, senderId, receiverId }) {
-  try {
-    // Make sure participants are populated (defensive)
-    // if participants are ObjectIds, populate before using this function.
-    // e.g. conversation = await conversation.populate('participants', 'basicDetails.firstName basicDetails.lastName profilePicture');
-
-    // Build sender response (synchronous)
-    const senderResponse = () => {
-      const opponent = conversation.participants.find(
-        (p) => p._id.toString() === receiverId.toString()
-      );
-
-      return {
-        id: conversation._id,
-        name: opponent
-          ? `${opponent.basicDetails.firstName} ${opponent.basicDetails.lastName}`
-          : "Unknown User",
-        profilePicture: opponent?.profilePicture || null,
-        lastMessage: conversation.lastMessage,
-        updatedAt: conversation.updatedAt,
-        unseenMessageCount: 0,
-      };
-    };
-
-    // Build receiver response (async because it needs unseen count)
-    const receiverResponse = async () => {
-      const opponent = conversation.participants.find(
-        (p) => p._id.toString() === senderId.toString()
-      );
-
-      // call the local function by name (not this.getUnseenMessagesCount)
-      const unseenMessageCount = await getUnseenMessagesCount(
-        conversation._id,
-        receiverId
-      );
-
-      return {
-        id: conversation._id,
-        name: opponent
-          ? `${opponent.basicDetails.firstName} ${opponent.basicDetails.lastName}`
-          : "Unknown User",
-        profilePicture: opponent?.profilePicture || null,
-        lastMessage: conversation.lastMessage,
-        updatedAt: conversation.updatedAt,
-        unseenMessageCount,
-      };
-    };
-
-    // Send to sender (immediately)
-    await socketService.sendToUser({
-      userId: senderId,
-      event: "new-conversation",
-      data: senderResponse(),
-    });
-
-    // Get receiver payload and send
-    const receiverData = await receiverResponse();
-    await socketService.sendToUser({
-      userId: receiverId,
-      event: "new-conversation",
-      data: receiverData,
-    });
-  } catch (e) {
-    logger.error("SEND CONVERSATION FUNCTION ERROR", e);
     throw e;
   }
 }
 
-// Export both functions
+function buildConversationListItem({
+  conversation,
+  currentUserId,
+  unseenMessageCount,
+}) {
+  const opponent = conversation.participants.find(
+    (participant) => participant._id.toString() !== currentUserId.toString(),
+  );
+
+  const payload = {
+    _id: conversation._id,
+    opponent: formatOpponent(opponent),
+    lastMessage: conversation.lastMessage,
+    createdAt: conversation.createdAt,
+    updatedAt: conversation.updatedAt,
+  };
+
+  if (typeof unseenMessageCount === "number") {
+    payload.unseenMessageCount = unseenMessageCount;
+  }
+
+  return payload;
+}
+
+async function emitConversationUpdated({
+  conversation,
+  senderId,
+  receiverId,
+  senderUnseenMessageCount = 0,
+}) {
+  try {
+    const receiverUnseenMessageCount = await getUnseenMessagesCount(
+      conversation._id,
+      receiverId,
+    );
+
+    await Promise.all([
+      socketService.sendToUser({
+        userId: senderId,
+        event: "conversation-updated",
+        data: buildConversationListItem({
+          conversation,
+          currentUserId: senderId,
+          unseenMessageCount: senderUnseenMessageCount,
+        }),
+      }),
+      socketService.sendToUser({
+        userId: receiverId,
+        event: "conversation-updated",
+        data: buildConversationListItem({
+          conversation,
+          currentUserId: receiverId,
+          unseenMessageCount: receiverUnseenMessageCount,
+        }),
+      }),
+    ]);
+  } catch (e) {
+    logger.error("EMIT CONVERSATION UPDATED ERROR", e);
+    throw e;
+  }
+}
+
 module.exports = {
+  buildConversationListItem,
+  emitConversationUpdated,
   getUnseenMessagesCount,
-  sendConversations,
 };

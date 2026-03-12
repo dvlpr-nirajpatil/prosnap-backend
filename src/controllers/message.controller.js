@@ -2,6 +2,10 @@ const { logger, response } = require("../core");
 const { Conversation, Message } = require("../models");
 const mongoose = require("mongoose");
 const socketService = require("../services/socket.service");
+const {
+  buildConversationListItem,
+  emitConversationUpdated,
+} = require("../services/conversation.service");
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // SEND MESSAGE
@@ -63,6 +67,17 @@ module.exports.sendMessage = async (req, res) => {
       "userName name profilePicture isVerified",
     );
 
+    const populatedConversation = await Conversation.findById(conversationId)
+      .populate("participants", "userName name profilePicture isVerified");
+
+    if (receiverId) {
+      await emitConversationUpdated({
+        conversation: populatedConversation,
+        senderId: userId,
+        receiverId,
+      });
+    }
+
     if (receiverId) {
       await socketService.sendToUser({
         userId: receiverId,
@@ -76,7 +91,11 @@ module.exports.sendMessage = async (req, res) => {
 
     return response(res, 201, "Message sent successfully", {
       message: populatedMessage,
-      lastMessage: lastMessagePayload,
+      conversation: buildConversationListItem({
+        conversation: populatedConversation,
+        currentUserId: userId,
+        unseenMessageCount: 0,
+      }),
     });
   } catch (e) {
     logger.error("SEND MESSAGE", e);

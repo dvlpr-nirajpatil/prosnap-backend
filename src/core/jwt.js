@@ -13,7 +13,7 @@ module.exports.generateRefreshToken = (payload) => {
 module.exports.generateAccessToken = (payload) => {
   try {
     return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: "1d",
+      expiresIn: "1m",
     });
   } catch (e) {
     throw e;

@@ -1,6 +1,7 @@
 const { logger, response } = require("../core");
 const { Conversation, User } = require("../models");
 const mongoose = require("mongoose");
+const { buildConversationListItem } = require("../services/conversation.service");
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // CREATE CONVERSATION
@@ -89,27 +90,12 @@ module.exports.getConversations = async (req, res) => {
       Conversation.countDocuments(query),
     ]);
 
-    const formattedConversations = conversations.map((conversation) => {
-      const opponent = conversation.participants.find(
-        (participant) => participant._id.toString() !== userId.toString(),
-      );
-
-      return {
-        _id: conversation._id,
-        opponent: opponent
-          ? {
-              _id: opponent._id,
-              userName: opponent.userName,
-              name: opponent.name,
-              profilePicture: opponent.profilePicture,
-              isVerified: opponent.isVerified,
-            }
-          : null,
-        lastMessage: conversation.lastMessage,
-        createdAt: conversation.createdAt,
-        updatedAt: conversation.updatedAt,
-      };
-    });
+    const formattedConversations = conversations.map((conversation) =>
+      buildConversationListItem({
+        conversation,
+        currentUserId: userId,
+      }),
+    );
 
     return response(res, 200, "Conversations fetched successfully", {
       conversations: formattedConversations,
